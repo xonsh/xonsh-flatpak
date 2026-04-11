@@ -1,13 +1,5 @@
 #!/usr/bin/env xonsh
-"""Build script for xonsh.flatpak.
 
-Usage:
-    xonsh build.xsh                                                             # build from xonsh/xonsh main
-    xonsh build.xsh --git-url https://github.com/anki-code/xonsh/tree/dev      # custom repo/branch
-    xonsh build.xsh --git-url https://gitlab.com/user/xonsh/-/tree/feature      # GitLab
-    xonsh build.xsh --clean                                                      # remove artifacts first
-    xonsh build.xsh --no-deps                                                    # skip runtime installation
-"""
 import sys
 import os
 import shutil
@@ -21,7 +13,6 @@ except ImportError:
     print("ERROR: click is required. Install with: pip install click")
     sys.exit(1)
 
-# ── Config ────────────────────────────────────────────────────────────
 APP_ID      = "io.github.xonsh.xonsh"
 MANIFEST    = f"{APP_ID}.yml"
 BUNDLE_NAME = "xonsh.flatpak"
@@ -31,7 +22,6 @@ BUILD_DIR   = "build-dir"
 
 DEFAULT_GIT_URL = None
 
-# ── Helpers ───────────────────────────────────────────────────────────
 def _run(cmd):
     """Run a command, abort on failure."""
     print(f"\n>>> {cmd}\n")
@@ -139,7 +129,7 @@ def _patch_manifest(manifest_path, clone_url, branch):
     text = re.sub(r'\n\s+commit:\s+\S+', '', text)
     manifest_path.write_text(text)
 
-# ── CLI ───────────────────────────────────────────────────────────────
+
 @click.command()
 @click.option('--git-url', default=None,
               help='Git URL: https://github.com/owner/repo/tree/branch or owner/repo. '
@@ -166,7 +156,6 @@ def main(git_url, output_file, clean, no_deps):
     _check_cmd("flatpak")
     _check_cmd("flatpak-builder")
 
-    # ── Step 1: Install dependencies ─────────────────────────────────
     if not no_deps:
         print("\n=== Ensuring Flathub remote ===")
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -182,9 +171,6 @@ def main(git_url, output_file, clean, no_deps):
     else:
         print("\n=== Skipping dependency installation (--no-deps) ===")
 
-    # ── Step 2: Prepare build directory ──────────────────────────────
-    # flatpak-builder uses FUSE (rofiles-fuse) which doesn't work on 9P
-    # filesystems (WSL /mnt/c/). Build on native Linux fs instead.
     if _is_9p_fs(srcdir):
         buildroot = Path(tempfile.mkdtemp(prefix='fp-build-'))
         print(f"\n=== 9P filesystem detected, building in {buildroot} ===")
@@ -201,13 +187,11 @@ def main(git_url, output_file, clean, no_deps):
     else:
         workdir = srcdir
 
-    # ── Step 3: Patch manifest with repo/branch ──────────────────────
     manifest_path = workdir / MANIFEST
     if clone_url:
         _patch_manifest(manifest_path, clone_url, branch)
         print(f"Manifest updated: {clone_url}" + (f" @ {branch}" if branch else ""))
 
-    # ── Step 4: Clean (optional) ─────────────────────────────────────
     if clean:
         print("\n=== Cleaning build artifacts ===")
         for d in [BUILD_DIR, REPO_DIR, '.flatpak-builder']:
@@ -215,7 +199,6 @@ def main(git_url, output_file, clean, no_deps):
             if p.exists():
                 shutil.rmtree(p)
 
-    # ── Step 5: Build ────────────────────────────────────────────────
     print("\n=== Building Flatpak ===")
     cd @(workdir)
     flatpak-builder --user --force-clean --repo=@(REPO_DIR) @(BUILD_DIR) @(MANIFEST)
@@ -224,7 +207,6 @@ def main(git_url, output_file, clean, no_deps):
         print("FATAL: build failed — repo directory not created")
         sys.exit(1)
 
-    # ── Step 6: Bundle ───────────────────────────────────────────────
     print(f"\n=== Creating {output_file} ===")
     flatpak build-bundle @(REPO_DIR) @(output_file) @(APP_ID)
 
@@ -233,7 +215,6 @@ def main(git_url, output_file, clean, no_deps):
         print("FATAL: bundle creation failed")
         sys.exit(1)
 
-    # ── Step 7: Copy result back if built on temp fs ─────────────────
     output = srcdir / output_file
     if workdir != srcdir:
         shutil.copy2(bundle, output)
