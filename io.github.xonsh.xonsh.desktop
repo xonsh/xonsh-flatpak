@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Xonsh
-Comment=Xonsh is a modern, full-featured and cross-platform Python-based shell.
+Comment=Xonsh is a Python-powered shell.
 Exec=xonsh
 Icon=io.github.xonsh.xonsh
 Terminal=true
