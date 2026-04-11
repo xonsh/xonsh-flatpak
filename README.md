@@ -2,7 +2,7 @@
 
 Flatpak package for [xonsh](https://xon.sh/).
 
-## Build
+## Build and Run
 
 ```bash
 sudo apt-get install -y flatpak flatpak-builder
