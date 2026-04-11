@@ -1,0 +1,9 @@
+[project]
+name = "xonsh-flatpak"
+version = "0.1.0"
+description = "Flatpak build scripts for xonsh shell"
+requires-python = ">=3.11"
+dependencies = [
+    "xonsh",
+    "click",
+]

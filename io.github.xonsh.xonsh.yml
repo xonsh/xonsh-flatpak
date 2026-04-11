@@ -1,0 +1,94 @@
+app-id: io.github.xonsh.xonsh
+runtime: org.freedesktop.Platform
+runtime-version: "24.08"
+sdk: org.freedesktop.Sdk
+command: xonsh
+
+finish-args:
+  - --share=network
+  - --share=ipc
+  - --device=all
+  - --filesystem=home
+  - --filesystem=/tmp
+  - --filesystem=host:ro
+  - --talk-name=org.freedesktop.Flatpak
+  - --env=TERM=xterm-256color
+  - --env=PATH=/app/bin:/usr/bin:/app/libexec/host-cmds
+
+modules:
+  - name: python3-wcwidth
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-index --find-links=. --prefix=/app --no-build-isolation wcwidth
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/68/5a/199c59e0a824a3db2b89c5d2dade7ab5f9624dbf6448dc291b46d5ec94d3/wcwidth-0.6.0-py3-none-any.whl
+        sha256: 1a3a1e510b553315f8e146c54764f4fb6264ffad731b3d78088cdb1478ffbdad
+
+  - name: python3-prompt-toolkit
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-index --find-links=. --prefix=/app --no-build-isolation prompt-toolkit
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/84/03/0d3ce49e2505ae70cf43bc5bb3033955d2fc9f932163e84dc0779cc47f48/prompt_toolkit-3.0.52-py3-none-any.whl
+        sha256: 9aac639a3bbd33284347de5ad8d68ecc044b91a762dc39b7c21095fcd6a19955
+
+  - name: python3-pygments
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-index --find-links=. --prefix=/app --no-build-isolation pygments
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/f4/7e/a72dd26f3b0f4f2bf1dd8923c85f7ceb43172af56d63c7383eb62b332364/pygments-2.20.0-py3-none-any.whl
+        sha256: 81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176
+
+  - name: python3-pyperclip
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-index --find-links=. --prefix=/app --no-build-isolation pyperclip
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/df/80/fc9d01d5ed37ba4c42ca2b55b4339ae6e200b456be3a1aaddf4a9fa99b8c/pyperclip-1.11.0-py3-none-any.whl
+        sha256: 299403e9ff44581cb9ba2ffeed69c7aa96a008622ad0c46cb575ca75b5b84273
+
+  - name: python3-distro
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-index --find-links=. --prefix=/app --no-build-isolation distro
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/12/b3/231ffd4ab1fc9d679809f356cebee130ac7daa00d6d6f3206dd4fd137e9e/distro-1.9.0-py3-none-any.whl
+        sha256: 7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2
+
+  - name: xonsh
+    buildsystem: simple
+    build-commands:
+      - pip3 install --prefix=/app --no-build-isolation .
+      - install -Dm644 flatpak-xonshrc.py /app/etc/xonsh/xonshrc.d/flatpak.py
+      - install -Dm755 host-spawn /app/libexec/host-spawn
+      - |
+        mkdir -p /app/libexec/host-cmds
+        for cmd in git docker podman systemctl journalctl apt apt-get dnf yum pacman \
+                   flatpak snap ssh scp rsync htop btop nmcli ip ss lsblk mount umount \
+                   rpm dpkg code vim nvim nano emacs tmux screen make cmake gcc g++ rustc \
+                   cargo node npm npx yarn pnpm go java javac pip pip3 conda; do
+          ln -sf /app/libexec/host-spawn /app/libexec/host-cmds/$cmd
+        done
+      - install -Dm644 io.github.xonsh.xonsh.desktop /app/share/applications/io.github.xonsh.xonsh.desktop
+      - install -Dm644 io.github.xonsh.xonsh.metainfo.xml /app/share/metainfo/io.github.xonsh.xonsh.metainfo.xml
+      - install -Dm644 io.github.xonsh.xonsh.svg /app/share/icons/hicolor/scalable/apps/io.github.xonsh.xonsh.svg
+    sources:
+      - type: git
+        url: https://github.com/xonsh/xonsh.git
+        branch: main
+      - type: file
+        path: flatpak-xonshrc.py
+      - type: file
+        path: host-spawn
+      - type: file
+        path: io.github.xonsh.xonsh.desktop
+      - type: file
+        path: io.github.xonsh.xonsh.metainfo.xml
+      - type: file
+        path: io.github.xonsh.xonsh.svg

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="console-application">
+  <id>io.github.xonsh.xonsh</id>
+  <name>Xonsh</name>
+  <summary>Xonsh is a modern, full-featured and cross-platform Python-based shell.</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>BSD-2-Clause</project_license>
+  <description>
+    <p>
+      Xonsh (sounds like "consh") is a modern, full-featured and cross-platform
+      Python-based shell. The language is a superset of Python 3 with seamless
+      integration of shell functionality and commands. It works on all major
+      systems including Linux, OSX, and Windows. Xonsh is meant for the daily
+      use of experts and novices.
+    </p>
+  </description>
+  <url type="homepage">https://xon.sh</url>
+  <url type="bugtracker">https://github.com/xonsh/xonsh/issues</url>
+  <url type="vcs-browser">https://github.com/xonsh/xonsh</url>
+  <provides>
+    <binary>xonsh</binary>
+  </provides>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/xonsh/xonsh-flatpak/main/screenshot.png</image>
+      <caption>Xonsh shell running in Flatpak</caption>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="0.22.8" date="2026-04-01" />
+  </releases>
+</component>
