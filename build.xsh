@@ -1,5 +1,7 @@
 #!/usr/bin/env xonsh
 
+"""Build xonsh flatpak"""
+
 import sys
 import os
 import shutil
