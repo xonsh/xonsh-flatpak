@@ -128,3 +128,7 @@ host mycommand --flag
 ## License
 
 xonsh is licensed under the BSD-2-Clause license.
+
+## Links
+
+* [Flatpak Submission](https://docs.flathub.org/docs/for-app-authors/submission)
