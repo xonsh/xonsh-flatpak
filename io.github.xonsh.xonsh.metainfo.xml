@@ -2,7 +2,7 @@
 <component type="console-application">
   <id>io.github.xonsh.xonsh</id>
   <name>Xonsh</name>
-  <summary>Xonsh is a modern, full-featured and cross-platform Python-based shell.</summary>
+  <summary>Xonsh is a Python-powered shell.</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>BSD-2-Clause</project_license>
   <description>
