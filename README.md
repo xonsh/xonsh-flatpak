@@ -1,6 +1,6 @@
 # Xonsh Flatpak
 
-Flatpak package for [xonsh](https://xon.sh/) — a modern, full-featured and cross-platform Python-based shell.
+Flatpak package for [xonsh](https://xon.sh/).
 
 ## Build
 
