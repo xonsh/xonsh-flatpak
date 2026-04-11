@@ -2,21 +2,15 @@
 
 Flatpak package for [xonsh](https://xon.sh/) — a modern, full-featured and cross-platform Python-based shell.
 
-Built on `org.freedesktop.Platform` / `org.freedesktop.Sdk` 24.08 (Python 3.12).
-
-## Quick Start
+## Build
 
 ```bash
-# Build
-pip install .          # install build script dependencies (xonsh, click)
-xonsh build.xsh        # build from xonsh/xonsh main branch
+sudo apt-get install -y flatpak flatpak-builder
+pip install .
+xonsh build.xsh
 
-# Install & run
 flatpak install --user xonsh.flatpak
 flatpak run io.github.xonsh.xonsh
-
-# Uninstall
-flatpak uninstall --user io.github.xonsh.xonsh
 ```
 
 ## Build Options
@@ -27,30 +21,10 @@ xonsh build.xsh
 
 # Custom repo and branch
 xonsh build.xsh --git-url https://github.com/anki-code/xonsh/tree/anki_new_start
-
-# Custom output filename
-xonsh build.xsh --output-file my-xonsh.flatpak
-
-# Clean build (remove cached artifacts)
-xonsh build.xsh --clean
-
-# Skip Flatpak runtime installation
-xonsh build.xsh --no-deps
 ```
 
 The `--git-url` flag accepts GitHub, GitLab, Codeberg URLs with branch in the path,
 SSH URLs (`git@github.com:owner/repo.git`), or shorthand (`owner/repo`).
-
-### Prerequisites
-
-```bash
-sudo apt-get install -y flatpak flatpak-builder
-```
-
-The build script automatically installs the Flathub remote and Freedesktop runtime/SDK.
-
-WSL note: The build script detects 9P filesystems (`/mnt/c/`) and automatically
-builds in `/tmp/` to avoid FUSE compatibility issues.
 
 ## Host Command Forwarding
 
@@ -83,10 +57,7 @@ During the Flatpak build, symlinks are created for common host commands:
 
 ```
 /app/libexec/host-cmds/git    → /app/libexec/host-spawn
-/app/libexec/host-cmds/docker → /app/libexec/host-spawn
-/app/libexec/host-cmds/ssh    → /app/libexec/host-spawn
-/app/libexec/host-cmds/htop   → /app/libexec/host-spawn
-...
+/app/libexec/host-cmds/* → /app/libexec/host-spawn
 ```
 
 The directory `/app/libexec/host-cmds` is **appended** to `$PATH` (not
@@ -112,22 +83,6 @@ Or copy `flatpak-xonshrc.py` to `~/.config/xonsh/rc.d/` for the `host` alias:
 ```xonsh
 host mycommand --flag
 ```
-
-## Sandbox Permissions
-
-| Permission                            | Reason                                        |
-|---------------------------------------|-----------------------------------------------|
-| `--share=network`                     | Network access for shell commands              |
-| `--share=ipc`                         | IPC for clipboard (pyperclip)                  |
-| `--device=all`                        | Full device access for terminal operations     |
-| `--filesystem=home`                   | Read/write access to user home directory       |
-| `--filesystem=/tmp`                   | Access to /tmp for temp files                  |
-| `--filesystem=host:ro`                | Read-only access to host filesystem            |
-| `--talk-name=org.freedesktop.Flatpak` | D-Bus access for `flatpak-spawn --host`        |
-
-## License
-
-xonsh is licensed under the BSD-2-Clause license.
 
 ## Links
 
