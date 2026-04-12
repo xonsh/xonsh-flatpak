@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/user-attachments/assets/384608e7-eafa-4f84-b521-4bd2d633892b" alt="Xonsh shell icon." width="100px">
+<img src="./xonsh-flatpak-icon.png" alt="Xonsh Flatpak" width="100px">
 </p>
 
 # Xonsh Flatpak
