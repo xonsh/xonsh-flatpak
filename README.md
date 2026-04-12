@@ -50,6 +50,7 @@ flatpak install --user xonsh.flatpak
 flatpak run io.github.xonsh.xonsh
 ```
 
-## Links
+## See also
 
 * [Flatpak Submission](https://docs.flathub.org/docs/for-app-authors/submission)
+* [xonsh AppImage](https://xon.sh/appimage.html)
