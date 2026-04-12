@@ -63,7 +63,7 @@ modules:
   - name: xonsh
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app --no-build-isolation .
+      - pip3 install --prefix=/app --no-build-isolation --no-deps .
       - install -Dm644 flatpak.xsh /app/etc/xonsh/rc.d/flatpak.xsh
       - install -Dm755 host-spawn /app/libexec/host-spawn
       - |
